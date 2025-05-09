@@ -9,6 +9,8 @@ from screens.menu_screen import MenuScreen
 from screens.age_screen  import AgeScreen
 from screens.settings_screen import SettingScreen
 from screens.capture_screen import CaptureScreen
+from screens.feeling_screen import FeelingScreen
+from screens.gender_screen import GenderScreen
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -23,15 +25,19 @@ class MainWindow(QMainWindow):
         #contenedor de vistas
         self.stack = QStackedWidget()
         self.menu_view = MenuScreen(stacked_widget=self.stack)
+        self.gender_view = GenderScreen(stacked_widget=self.stack,controller=self.controller)
         self.age_view = AgeScreen(stacked_widget=self.stack,controller=self.controller)
         self.capture_view = CaptureScreen(stacked_widget=self.stack,controller=self.controller)
         self.settings_view = SettingScreen(stacked_widget=self.stack)
+        self.feeling_view = FeelingScreen(stacked_widget=self.stack,controller=self.controller)
 
-        self.stack.addWidget(self.menu_view)
-        self.stack.addWidget(self.age_view)
-        self.stack.addWidget(self.settings_view)
-        self.stack.addWidget(self.capture_view)
-        self.stack.setCurrentIndex(0)
+        self.stack.addWidget(self.settings_view)    #index 0
+        self.stack.addWidget(self.menu_view) #index 1
+        self.stack.addWidget(self.gender_view) #index 2
+        self.stack.addWidget(self.age_view) #index 3
+        self.stack.addWidget(self.feeling_view) #index 4
+        self.stack.addWidget(self.capture_view) #index 5
+        self.stack.setCurrentIndex(1)
         
         main_layout.addWidget(self.stack)
 
@@ -40,7 +46,7 @@ class MainWindow(QMainWindow):
     def get_stylesheet(self):
          return """
         QWidget {
-            background-color: #FAFAFA;
+            background-color: #ecf0f1;
             font-family: 'Segoe UI', sans-serif;
             font-size: 14px;
         }
@@ -53,11 +59,6 @@ class MainWindow(QMainWindow):
 
         """
         
-        
-
-        
-
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()

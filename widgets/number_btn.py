@@ -11,7 +11,7 @@ class NumberButton(QPushButton):
         return """
 
             QPushButton {
-                background-color: #34495e;
+                background-color: #3498db;
                 color: white;
                 border: none;
                 border-radius: 8px;
@@ -23,11 +23,11 @@ class NumberButton(QPushButton):
             }
 
             QPushButton:hover {
-                background-color: #85929e;
+                background-color: #5499c7;
             }
 
             QPushButton:pressed {
-                background-color: #34495e;
+                background-color: #5499c7;
             }
 
         """

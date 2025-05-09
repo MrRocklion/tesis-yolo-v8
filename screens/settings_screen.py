@@ -25,7 +25,7 @@ class SettingScreen(QWidget):
         self.setLayout(layout)
     
     def change_view(self):
-        self.stacked_widget.setCurrentIndex(0)
+        self.stacked_widget.setCurrentIndex(1)
 
         
 

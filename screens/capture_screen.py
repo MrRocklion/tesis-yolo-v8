@@ -29,11 +29,11 @@ class CaptureScreen(QWidget):
 
         self.home_btn = MenuButton("Regresar al Inicio")
         self.home_btn.clicked.connect(self.regresar_a_primera_ventana)
-        self.layout.addWidget(self.image_label)
-        self.layout.addWidget(self.age_label)
-        self.layout.addWidget(self.home_btn)
+        self.layout.addWidget(self.image_label,4)
+        self.layout.addWidget(self.age_label,1)
+        self.layout.addWidget(self.home_btn,1)
         self.setLayout(self.layout)
-        self.controller.ageChanged.connect(self.actualizar_edad)
+        self.controller.dataChanged.connect(self.datos)
         self.iniciar_camara()
 
         
@@ -89,7 +89,7 @@ class CaptureScreen(QWidget):
         self.userData = datos
 
     def regresar_a_primera_ventana(self):
-        self.stacked_widget.setCurrentIndex(0)
+        self.stacked_widget.setCurrentIndex(1)
     
-    def actualizar_edad(self, nueva_edad):
-        self.age_label.setText(f"Edad: {nueva_edad}")
+    def datos(self, data):
+        self.age_label.setText(f"Edad: {data['age']},sexo: {data['gender']}, animo: {data['emotion']}")

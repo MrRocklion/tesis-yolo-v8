@@ -16,13 +16,18 @@ class MenuScreen(QWidget):
         layout.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         layout.setContentsMargins(80, 0, 80, 0) 
         layout.setSpacing(20)
-        title = QLabel("MENU SCREEN")
-        title.setObjectName("menuTitle")
+        title = QLabel("MENU PRINCIPAL")
+        title.setStyleSheet("""
+            font-size: 84px;
+            font-weight: bold;
+            color: #34495e;
+            font-family: 'Segoe UI', sans-serif;
+        """)
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        age_btn = StartButton("INICIAR", lambda: self.change_view(1))
+        age_btn = StartButton("INICIAR", lambda: self.change_view(2))
         exit_btn = ExitButton("SALIR")
         exit_btn.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        settings_btn = SettingsButton("AJUSTES", lambda: self.change_view(2))
+        settings_btn = SettingsButton("AJUSTES", lambda: self.change_view(0))
 
         #agregamos los widgets al layout
         layout.addWidget(title)

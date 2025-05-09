@@ -14,6 +14,12 @@ class AgeScreen(QWidget):
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         title = QLabel("¿Cuántos años tienes?")
+        title.setStyleSheet("""
+            font-size: 84px;
+            font-weight: bold;
+            color: #34495e;
+            font-family: 'Segoe UI', sans-serif;
+        """)
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         #agregamos una fila de botones
         file_buttons_1 = QHBoxLayout()
@@ -48,7 +54,7 @@ class AgeScreen(QWidget):
         file_buttons_2.addWidget(thirteen_btn)
 
         return_btn = MenuButton("Regresar al Inicio")
-        return_btn.clicked.connect(lambda: self.change_view(0))
+        return_btn.clicked.connect(lambda: self.change_view(1))
 
 
         layout.addWidget(title)
@@ -57,7 +63,7 @@ class AgeScreen(QWidget):
         layout.addSpacing(20)
         layout.addLayout(file_buttons_2)
         layout.addSpacing(20)
-        layout.addWidget(return_btn)
+        #layout.addWidget(return_btn)
 
         self.setLayout(layout)
     
@@ -65,7 +71,7 @@ class AgeScreen(QWidget):
         self.stacked_widget.setCurrentIndex(index)
     def select_age(self,age):
         self.controller.set_age(age)
-        self.stacked_widget.setCurrentIndex(3)
+        self.stacked_widget.setCurrentIndex(4)
 
         
 
