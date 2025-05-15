@@ -5,7 +5,9 @@ class MainController(QObject):
     genderChanged = Signal(str)
     emotionChanged = Signal(str)
     classObjectChanged = Signal(str)
+    yoloChanged = Signal(bool)
     dataChanged = Signal(dict)
+    gptPredictionChanged = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -13,6 +15,13 @@ class MainController(QObject):
         self._gender = "masculino"
         self._emotion = "relajado"
         self._class_yolo = ""
+        self._yolo = False
+        self._gpt_prediction = ""
+
+    def set_yolo(self, yolo: bool):
+        self._yolo = yolo
+        self.yoloChanged.emit(yolo)
+        self.yoloChanged.emit(self.get_yolo())
 
     def set_age(self, age: int):
         self._age = age
@@ -33,6 +42,12 @@ class MainController(QObject):
         self._class_yolo = class_yolo
         self.classObjectChanged.emit(class_yolo)
         self.dataChanged.emit(self.get_user_data())
+    
+    def set_gpt_prediction(self, prediction: str):
+        self._gpt_prediction = prediction
+        self.gptPredictionChanged.emit(prediction)
+        self.gptPredictionChanged.emit(self.get_gpt_prediction())
+        
 
     def get_age(self) -> int:
         return self._age
@@ -50,6 +65,11 @@ class MainController(QObject):
             "emotion": self._emotion,
             "class_yolo": self._class_yolo  
         }
+    def get_yolo(self) -> bool:
+        return self._yolo
+    
+    def get_gpt_prediction(self) -> str:
+        return self._gpt_prediction
 
     def reset(self):
         self.set_age(0)

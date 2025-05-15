@@ -22,7 +22,7 @@ class CaptureScreen(QWidget):
         super().__init__()
         #parametros yolo
         self.yolov8_detector = YOLOv8("models/best.onnx", conf_thres=0.5, iou_thres=0.5)
-        self.start=True
+        self.start=False
         self.detection_duration = 3
         self.score_threshold = 0.8
         self.image_path = "target.jpg"
@@ -46,13 +46,14 @@ class CaptureScreen(QWidget):
         self.layout.addWidget(self.home_btn,1)
         self.setLayout(self.layout)
         self.controller.dataChanged.connect(self.datos)
+        self.controller.yoloChanged.connect(self.yoloActivate)
         self.iniciar_camara()
 
         
 
-    def showEvent(self, event):
+    def enable_yolo(self, event):
         super().showEvent(event)
-        self.timer.start(30)
+        self.start = True
         
 
     def iniciar_camara(self):
@@ -64,22 +65,9 @@ class CaptureScreen(QWidget):
         self.timer.timeout.connect(self.mostrar_frame)
         self.timer.start(30)
     def on_object_identified(self):
-        url = "https://predict.ultralytics.com"
-        headers = {"x-api-key": "0a9bc0db09f57ab77a254e400877b03f91ac946e5d"}
-        data = {
-            "model": "https://hub.ultralytics.com/models/5NOJhLhigIjjuOABqyUQ",
-            "imgsz": 640,
-            "conf": 0.25,
-            "iou": 0.45
-        }
-        with open("target.jpg", "rb") as f:
-            response = requests.post(url, headers=headers, data=data, files={"file": f})
-        response.raise_for_status()
-        result = response.json()
-        name_class = result['images'][0]['results'][0]['name']
-        self.controller.set_class_object(name_class)
-        print(f"✅ Objeto '{name_class}' identificado correctamente durante {self.detection_duration} segundos.")
-         # Limpiar temporizadores después de la identificación
+        self.start = False
+        self.stacked_widget.setCurrentIndex(6)
+    
 
 
     def mostrar_frame(self):
@@ -113,7 +101,7 @@ class CaptureScreen(QWidget):
                                 cv2.imwrite('target.jpg', object_crop)
                                 self.on_object_identified()
                             else:
-                                print("⚠️ Región de objeto vacía, no se guardó imagen.")
+                                print("Región de objeto vacía, no se guardó imagen.")
                             self.detection_timers[class_id] = float('inf')  # evitar múltiples disparos
                 else:
                     self.detection_timers.pop(class_id, None) 
@@ -153,7 +141,10 @@ class CaptureScreen(QWidget):
 
     def regresar_a_primera_ventana(self):
         self.stacked_widget.setCurrentIndex(1)
-    
+        
+    def yoloActivate(self,data):
+        self.start = data
+
     def datos(self, data):
         self.detection_timers = {}
         self.age_label.setText(f"Edad: {data['age']},sexo: {data['gender']}, animo: {data['emotion']}, clase : {data['class_yolo']}")

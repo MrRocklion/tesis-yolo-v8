@@ -72,6 +72,7 @@ class FeelingScreen(QWidget):
 
     def select_feeling(self,emotion):
         self.controller.set_emotion(emotion)
+        self.controller.set_yolo(True)
         self.stacked_widget.setCurrentIndex(5)
 
         
