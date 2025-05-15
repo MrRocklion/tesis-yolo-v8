@@ -102,7 +102,6 @@ class CaptureScreen(QWidget):
                 # Manejo del temporizador para objetos con score alto
 
                 if score >= self.score_threshold:
-                    print(self.detection_timers)
                     if class_id not in self.detection_timers:
                         self.detection_timers[class_id] = current_time
                     else:
@@ -157,5 +156,4 @@ class CaptureScreen(QWidget):
     
     def datos(self, data):
         self.detection_timers = {}
-        print(self.detection_timers)
         self.age_label.setText(f"Edad: {data['age']},sexo: {data['gender']}, animo: {data['emotion']}, clase : {data['class_yolo']}")
