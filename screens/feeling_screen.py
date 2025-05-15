@@ -26,19 +26,19 @@ class FeelingScreen(QWidget):
         file_buttons_1 = QHBoxLayout()
         file_buttons_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
         happy_btn = EmotionButton(text="Contento", name="happy")
-        happy_btn.clicked.connect(lambda: self.select_feeling("feliz"))
+        happy_btn.clicked.connect(lambda: self.select_feeling("happy"))
 
         angry_btn = EmotionButton(text="Enojado", name="angry")
-        angry_btn.clicked.connect(lambda: self.select_feeling("enojado"))
+        angry_btn.clicked.connect(lambda: self.select_feeling("angry"))
 
         sad_btn = EmotionButton(text="Triste", name="sad")
-        sad_btn.clicked.connect(lambda: self.select_feeling("triste"))
+        sad_btn.clicked.connect(lambda: self.select_feeling("sad"))
 
         bored_btn = EmotionButton(text="Aburrido", name="bored")
-        bored_btn.clicked.connect(lambda: self.select_feeling("aburrido"))
+        bored_btn.clicked.connect(lambda: self.select_feeling("bored"))
 
         relaxed_btn = EmotionButton(text="Relajado", name="relaxed")
-        relaxed_btn.clicked.connect(lambda: self.select_feeling("relajado"))
+        relaxed_btn.clicked.connect(lambda: self.select_feeling("relaxed"))
        
         file_buttons_1.addWidget(happy_btn)
         file_buttons_1.addWidget(angry_btn)

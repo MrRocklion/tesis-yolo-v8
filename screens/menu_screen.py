@@ -16,7 +16,7 @@ class MenuScreen(QWidget):
         layout.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         layout.setContentsMargins(80, 0, 80, 0) 
         layout.setSpacing(20)
-        title = QLabel("MENU PRINCIPAL")
+        title = QLabel("MENU")
         title.setStyleSheet("""
             font-size: 84px;
             font-weight: bold;

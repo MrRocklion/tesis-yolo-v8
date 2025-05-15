@@ -35,17 +35,8 @@ class CaptureScreen(QWidget):
         self.layout = QVBoxLayout()
         self.image_label = QLabel("Iniciando cámara...")
         self.image_label.setAlignment(Qt.AlignCenter)
-        self.age_label = QLabel("Edad: " + str(self.controller.get_age()))
-        self.age_label.setStyleSheet("font-size: 24px; font-weight: bold;color: #212121;")
-        self.age_label.setAlignment(Qt.AlignCenter)
-
-        self.home_btn = MenuButton("Regresar al Inicio")
-        self.home_btn.clicked.connect(self.regresar_a_primera_ventana)
         self.layout.addWidget(self.image_label,4)
-        self.layout.addWidget(self.age_label,1)
-        self.layout.addWidget(self.home_btn,1)
         self.setLayout(self.layout)
-        self.controller.dataChanged.connect(self.datos)
         self.controller.yoloChanged.connect(self.yoloActivate)
         self.iniciar_camara()
 
@@ -64,6 +55,7 @@ class CaptureScreen(QWidget):
 
         self.timer.timeout.connect(self.mostrar_frame)
         self.timer.start(30)
+
     def on_object_identified(self):
         self.start = False
         self.stacked_widget.setCurrentIndex(6)
@@ -132,19 +124,8 @@ class CaptureScreen(QWidget):
             image_cropped = image[y1:y1 + new_height, :]
 
         return image_cropped
-
-
-
-
-    def recibir_datos(self, datos):
-        self.userData = datos
-
-    def regresar_a_primera_ventana(self):
-        self.stacked_widget.setCurrentIndex(1)
         
     def yoloActivate(self,data):
         self.start = data
 
-    def datos(self, data):
-        self.detection_timers = {}
-        self.age_label.setText(f"Edad: {data['age']},sexo: {data['gender']}, animo: {data['emotion']}, clase : {data['class_yolo']}")
+

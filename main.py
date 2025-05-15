@@ -44,6 +44,7 @@ class MainWindow(QMainWindow):
         self.stack.addWidget(self.capture_view) #index 5
         self.stack.addWidget(self.loading_view) #index 6
         self.stack.addWidget(self.result_view) #index 7
+        self.stack.currentChanged.connect(self.on_view_changed)
         self.stack.setCurrentIndex(1)
         
         main_layout.addWidget(self.stack)
@@ -62,9 +63,11 @@ class MainWindow(QMainWindow):
             font-size: 24px;
             color: #212121;
         }
-
-
         """
+    def on_view_changed(self, index):
+        if index == 6:
+            self.loading_view.process_data()
+        print("changed to view index:", index)
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -25,9 +25,9 @@ class GenderScreen(QWidget):
         file_buttons_1 = QHBoxLayout()
         file_buttons_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
         male_btn = GenderButton(text="Niño", name="male")
-        male_btn.clicked.connect(lambda: self.select_gender("masculino"))
+        male_btn.clicked.connect(lambda: self.select_gender("male"))
         female_btn = GenderButton(text="Niña", name="female")
-        female_btn.clicked.connect(lambda: self.select_gender("femenino"))
+        female_btn.clicked.connect(lambda: self.select_gender("female"))
        
         file_buttons_1.addWidget(male_btn)
         file_buttons_1.addWidget(female_btn)
