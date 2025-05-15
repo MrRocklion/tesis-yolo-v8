@@ -15,7 +15,7 @@ class GenderScreen(QWidget):
 
         title = QLabel("¿Como te identificas?")
         title.setStyleSheet("""
-            font-size: 84px;
+            font-size: 64px;
             font-weight: bold;
             color: #34495e;
             font-family: 'Segoe UI', sans-serif;

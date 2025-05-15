@@ -16,7 +16,7 @@ class FeelingScreen(QWidget):
 
         title = QLabel("¿Como te Sientes Hoy?")
         title.setStyleSheet("""
-            font-size: 84px;
+            font-size: 64px;
             font-weight: bold;
             color: #34495e;
             font-family: 'Segoe UI', sans-serif;
