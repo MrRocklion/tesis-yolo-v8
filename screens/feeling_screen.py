@@ -1,10 +1,8 @@
 from PySide6.QtWidgets import (
     QWidget,QVBoxLayout,QLabel,QHBoxLayout
 )
-
 from PySide6.QtCore import Qt
 from widgets.menu_btn import MenuButton
-from widgets.number_btn import NumberButton
 from widgets.emotion_button import EmotionButton
 class FeelingScreen(QWidget):
     def __init__(self, stacked_widget,controller):

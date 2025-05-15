@@ -1,18 +1,11 @@
-from PySide6.QtWidgets import (
-    QApplication, QWidget, QPushButton, QVBoxLayout,
-    QLabel, QStackedWidget,QMessageBox
+from PySide6.QtWidgets import ( QWidget, QVBoxLayout,
+    QLabel
 )
 from PySide6.QtGui import QImage, QPixmap
-from PySide6.QtCore import Qt, QTimer, Signal
-import sys
+from PySide6.QtCore import Qt, QTimer
 import cv2
-import requests
-from requests.auth import HTTPDigestAuth
-import json
-from PIL import Image
 import os
 import time
-from widgets.menu_btn import MenuButton
 from yolov8 import YOLOv8
 current_dir = os.path.dirname(os.path.abspath(__file__))  
 project_root = os.path.abspath(os.path.join(current_dir, "..")) 

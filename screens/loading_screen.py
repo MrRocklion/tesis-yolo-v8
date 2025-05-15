@@ -42,26 +42,37 @@ class DataProcessor(QObject):
                 "gender": self.controller.get_gender(),
                 "class": name_class,
             }
-            promt = f'''
-                Generate an explanatory paragraph in spanish adapted for a child diagnosed with Autism Spectrum Disorder (ASD), about the word "{data_promt["class"]}". 
+            # prompt = f'''
+            #     Generate an explanatory paragraph in spanish adapted for a child diagnosed with Autism Spectrum Disorder (ASD), about the word "{data_promt["class"]}". 
 
-                The explanation should:
-                - Use simple, clear, and concrete language.
-                - Describe what the word means and how it is used in daily life.
-                - Include examples that relate to the childs world and help improve their semantic understanding.
+            #     The explanation should:
+            #     - Use simple, clear, and concrete language.
+            #     - Describe what the word means and how it is used in daily life.
+            #     - Include examples that relate to the childs world and help improve their semantic understanding.
 
-                Take into account:
-                - The child's current mood: {data_promt["mood"]}
-                - The child's age: {data_promt["age"]} years old
-                - The child's gender: {data_promt["gender"]}
+            #     Take into account:
+            #     - The child's current mood: {data_promt["mood"]}
+            #     - The child's age: {data_promt["age"]} years old
+            #     - The child's gender: {data_promt["gender"]}
 
-                Make the explanation friendly, supportive, and emotionally sensitive based on the child's mood.
+            #     Make the explanation friendly, supportive, and emotionally sensitive based on the child's mood.
 
-                '''
+            #     '''
+            prompt = f'''
+                    Generate an explanatory paragraph in spanish adapted for a child diagnosed with Autism Spectrum Disorder (ASD), about the word "{data_promt["class"]}".
+
+                    The child is {data_promt["age"]} years old, {data_promt["gender"]}, and currently feeling {data_promt["mood"]}.
+
+                    Use simple, clear, and concrete language. Help the child understand what the word means and how it relates to their daily life. Give examples that make sense for a child of that age and emotional state.
+
+                    The explanation should be friendly and supportive. Please give a direct explanation — do not include placeholders or fields in brackets like [name]
+                    **Limit the explanatory paragraph to no more than 80 words.**
+                    '''
+
             response = client.chat.completions.create(
                 model="gpt-4o",  # Puedes usar también gpt-4 o gpt-3.5-turbo
                 messages=[
-                    {"role": "user", "content": promt}
+                    {"role": "user", "content": prompt}
                 ],
                 temperature=0.7,
             )

@@ -33,7 +33,7 @@ class EmotionButton(QToolButton):
                 border-radius: 8px;
                 padding: 10px;
                 font-family: 'Segoe UI', sans-serif;
-                font-size: 14px;
+                font-size: 18px;
                 font-weight: bold;
             }
             QToolButton:hover {

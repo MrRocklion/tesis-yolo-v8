@@ -3,7 +3,6 @@ from PySide6.QtWidgets import (
 )
 
 from PySide6.QtCore import Qt
-from widgets.menu_btn import MenuButton
 from widgets.gender_btn import GenderButton
 class GenderScreen(QWidget):
     def __init__(self, stacked_widget,controller):
@@ -30,6 +29,7 @@ class GenderScreen(QWidget):
         female_btn.clicked.connect(lambda: self.select_gender("female"))
        
         file_buttons_1.addWidget(male_btn)
+        file_buttons_1.addSpacing(20)
         file_buttons_1.addWidget(female_btn)
 
 
