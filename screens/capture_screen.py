@@ -13,9 +13,21 @@ from PIL import Image
 import os
 import time
 from widgets.menu_btn import MenuButton
+from yolov8 import YOLOv8
+current_dir = os.path.dirname(os.path.abspath(__file__))  
+project_root = os.path.abspath(os.path.join(current_dir, "..")) 
+model_path = os.path.join(project_root, "models", f"best.onnx")
 class CaptureScreen(QWidget):
     def __init__(self, stacked_widget,controller):
         super().__init__()
+        #parametros yolo
+        self.yolov8_detector = YOLOv8("models/best.onnx", conf_thres=0.5, iou_thres=0.5)
+        self.start=True
+        self.detection_duration = 3
+        self.score_threshold = 0.8
+        self.image_path = "target.jpg"
+        self.detection_timers = {}
+        self.cooldown = 5
         self.controller = controller
         self.stacked_widget = stacked_widget
         self.cap = None
@@ -50,11 +62,62 @@ class CaptureScreen(QWidget):
             return
 
         self.timer.timeout.connect(self.mostrar_frame)
-        self.timer.start(30) 
+        self.timer.start(30)
+    def on_object_identified(self):
+        url = "https://predict.ultralytics.com"
+        headers = {"x-api-key": "0a9bc0db09f57ab77a254e400877b03f91ac946e5d"}
+        data = {
+            "model": "https://hub.ultralytics.com/models/5NOJhLhigIjjuOABqyUQ",
+            "imgsz": 640,
+            "conf": 0.25,
+            "iou": 0.45
+        }
+        with open("target.jpg", "rb") as f:
+            response = requests.post(url, headers=headers, data=data, files={"file": f})
+        response.raise_for_status()
+        result = response.json()
+        name_class = result['images'][0]['results'][0]['name']
+        self.controller.set_class_object(name_class)
+        print(f"✅ Objeto '{name_class}' identificado correctamente durante {self.detection_duration} segundos.")
+         # Limpiar temporizadores después de la identificación
+
 
     def mostrar_frame(self):
         ret, frame = self.cap.read()
         if ret:
+            
+            if self.start:
+                boxes, scores, class_ids = self.yolov8_detector(frame)
+            else:
+                boxes, scores, class_ids = [], [], []
+            current_time = time.time()
+            
+            for box, score, class_id in zip(boxes, scores, class_ids):
+                x1, y1, x2, y2 = map(int, box)
+                label = f"ID: {class_id} ({score:.2f})"
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                cv2.putText(frame, label, (x1, max(y1 - 10, 10)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+                # Manejo del temporizador para objetos con score alto
+
+                if score >= self.score_threshold:
+                    print(self.detection_timers)
+                    if class_id not in self.detection_timers:
+                        self.detection_timers[class_id] = current_time
+                    else:
+                        elapsed = current_time - self.detection_timers[class_id]
+                        if elapsed >= self.detection_duration:
+                            # Extraer región del objeto y guardarla
+                            object_crop = frame[y1:y2, x1:x2]
+                            if object_crop.size > 0:
+                                cv2.imwrite('target.jpg', object_crop)
+                                self.on_object_identified()
+                            else:
+                                print("⚠️ Región de objeto vacía, no se guardó imagen.")
+                            self.detection_timers[class_id] = float('inf')  # evitar múltiples disparos
+                else:
+                    self.detection_timers.pop(class_id, None) 
             frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             height, width, channel = frame_rgb.shape
             bytes_per_line = 3 * width
@@ -66,6 +129,7 @@ class CaptureScreen(QWidget):
                 self.image_label.width(), self.image_label.height(),
                 Qt.KeepAspectRatio
             ))
+
     def crop_to_portrait(self,image, aspect_ratio=(4, 5)):
         height, width, _ = image.shape
         target_ratio = aspect_ratio[0] / aspect_ratio[1]
@@ -92,4 +156,6 @@ class CaptureScreen(QWidget):
         self.stacked_widget.setCurrentIndex(1)
     
     def datos(self, data):
-        self.age_label.setText(f"Edad: {data['age']},sexo: {data['gender']}, animo: {data['emotion']}")
+        self.detection_timers = {}
+        print(self.detection_timers)
+        self.age_label.setText(f"Edad: {data['age']},sexo: {data['gender']}, animo: {data['emotion']}, clase : {data['class_yolo']}")
