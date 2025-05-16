@@ -45,11 +45,8 @@ class FeelingScreen(QWidget):
         file_buttons_1.addWidget(relaxed_btn)
 
 
-
-       # ... código anterior ...
-
         return_btn = MenuButton("Regresar al Inicio")
-        return_btn.setFixedSize(160, 50)  # Puedes ajustar esto como desees
+        return_btn.setFixedSize(160, 50)
         return_btn.clicked.connect(lambda: self.change_view(1))
 
         return_layout = QHBoxLayout()
@@ -60,7 +57,7 @@ class FeelingScreen(QWidget):
         layout.addSpacing(20)
         layout.addLayout(file_buttons_1)
         layout.addSpacing(40)
-        #layout.addLayout(return_layout)  # <-- Aquí lo agregas envuelto
+
 
         self.setLayout(layout)
 

@@ -31,24 +31,10 @@ class GenderScreen(QWidget):
         file_buttons_1.addWidget(male_btn)
         file_buttons_1.addSpacing(20)
         file_buttons_1.addWidget(female_btn)
-
-
-
-
-    #    # ... código anterior ...
-
-    #     return_btn = MenuButton("Regresar al Inicio")
-    #     return_btn.setFixedSize(160, 50)  # Puedes ajustar esto como desees
-    #     return_btn.clicked.connect(lambda: self.change_view(1))
-
-    #     return_layout = QHBoxLayout()
-    #     return_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    #     return_layout.addWidget(return_btn)
-
         layout.addWidget(title)
         layout.addSpacing(20)
         layout.addLayout(file_buttons_1)
-        #layout.addLayout(return_layout)  # <-- Aquí lo agregas envuelto
+
 
         self.setLayout(layout)
 

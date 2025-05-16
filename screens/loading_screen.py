@@ -29,7 +29,6 @@ client = OpenAI(api_key=api_key)
 cred = credentials.Certificate(service_account_info)
 firebase_admin.initialize_app(cred)
 
-# 4) Obtén el cliente de Firestore
 db = firestore.client()
 
 class DataProcessor(QObject):
@@ -91,7 +90,7 @@ class DataProcessor(QObject):
                     '''
 
             response = client.chat.completions.create(
-                model="gpt-4o",  # Puedes usar también gpt-4 o gpt-3.5-turbo
+                model="gpt-4o",  
                 messages=[
                     {"role": "user", "content": prompt}
                 ],

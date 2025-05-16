@@ -23,12 +23,12 @@ class SettingsButton(QPushButton):
     def render_colored_icon(self, svg_path: str, color: QColor) -> QPixmap:
         """Renderiza un archivo SVG con un color personalizado."""
         renderer = QSvgRenderer(svg_path)
-        pixmap = QPixmap(48, 48)  # Tamaño del icono (ajusta según sea necesario)
-        pixmap.fill(Qt.transparent)  # Fondo transparente
+        pixmap = QPixmap(48, 48)  
+        pixmap.fill(Qt.transparent) 
 
         painter = QPainter(pixmap)
         painter.setPen(Qt.NoPen)
-        painter.setBrush(color)  # Aplicar el color personalizado
+        painter.setBrush(color)  
         renderer.render(painter)
         painter.end()
 
