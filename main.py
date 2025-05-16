@@ -1,8 +1,7 @@
 from PySide6.QtWidgets import (
-    QApplication, QWidget, QPushButton, QVBoxLayout,
-    QStackedWidget, QLabel, QHBoxLayout, QMainWindow
+    QApplication, QWidget, QVBoxLayout,
+    QStackedWidget, QMainWindow
 )
-from PySide6.QtCore import Qt
 import sys
 from controllers.main_controller import MainController
 from screens.menu_screen import MenuScreen
@@ -26,7 +25,7 @@ class MainWindow(QMainWindow):
 
         #contenedor de vistas
         self.stack = QStackedWidget()
-        self.settings_view = SettingScreen(stacked_widget=self.stack)
+        self.settings_view = SettingScreen(stacked_widget=self.stack,controller=self.controller)
         self.menu_view = MenuScreen(stacked_widget=self.stack)
         self.gender_view = GenderScreen(stacked_widget=self.stack,controller=self.controller)
         self.age_view = AgeScreen(stacked_widget=self.stack,controller=self.controller)
@@ -67,7 +66,7 @@ class MainWindow(QMainWindow):
     def on_view_changed(self, index):
         if index == 6:
             self.loading_view.process_data()
-        print("changed to view index:", index)
+
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)

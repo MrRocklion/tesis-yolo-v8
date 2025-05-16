@@ -27,6 +27,7 @@ class ResultScreen(QWidget):
 
         horizontal_layout = QHBoxLayout()
         horizontal_layout.addWidget(self.btn_retry)
+        horizontal_layout.setSpacing(20)
         horizontal_layout.addWidget(self.btn_back)
         layout.addWidget(self.result_label)
         layout.addSpacing(20)

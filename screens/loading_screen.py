@@ -5,12 +5,32 @@ from widgets.loading import LoadingWidget
 import os
 from openai import OpenAI
 from dotenv import load_dotenv
-
+import firebase_admin
+from firebase_admin import credentials, firestore
+from datetime import datetime
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
+service_account_info = {
+    "type": os.getenv("TYPE"),
+    "project_id": os.getenv("PROJECT_ID"),
+    "private_key_id": os.getenv("PRIVATE_KEY_ID"),
+    "private_key": os.getenv("PRIVATE_KEY").replace("\\n", "\n"),
+    "client_email": os.getenv("CLIENT_EMAIL"),
+    "client_id": os.getenv("CLIENT_ID"),
+    "auth_uri": os.getenv("AUTH_URI"),
+    "token_uri": os.getenv("TOKEN_URI"),
+    "auth_provider_x509_cert_url": os.getenv("AUTH_PROVIDER_X509_CERT_URL"),
+    "client_x509_cert_url": os.getenv("CLIENT_X509_CERT_URL"),
+    "universe_domain": os.getenv("UNIVERSE_DOMAIN"),
+}
 if not api_key:
     raise ValueError("La variable de entorno OPENAI_API_KEY no está definida.")
 client = OpenAI(api_key=api_key)
+cred = credentials.Certificate(service_account_info)
+firebase_admin.initialize_app(cred)
+
+# 4) Obtén el cliente de Firestore
+db = firestore.client()
 
 class DataProcessor(QObject):
     finished = Signal(dict, str)  # resultado, clase detectada
@@ -41,6 +61,10 @@ class DataProcessor(QObject):
                 "mood": self.controller.get_emotion(),
                 "gender": self.controller.get_gender(),
                 "class": name_class,
+                "name": self.controller.get_name(),
+                "prediction":"",
+                "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                "created_at": firestore.SERVER_TIMESTAMP
             }
             # prompt = f'''
             #     Generate an explanatory paragraph in spanish adapted for a child diagnosed with Autism Spectrum Disorder (ASD), about the word "{data_promt["class"]}". 
@@ -59,12 +83,9 @@ class DataProcessor(QObject):
 
             #     '''
             prompt = f'''
-                    Generate an explanatory paragraph in spanish adapted for a child diagnosed with Autism Spectrum Disorder (ASD), about the word "{data_promt["class"]}".
-
+                    Generate an explanatory paragraph in spanish adapted for a child named {data_promt['name']} diagnosed with Autism Spectrum Disorder (ASD), about the word "{data_promt["class"]}".
                     The child is {data_promt["age"]} years old, {data_promt["gender"]}, and currently feeling {data_promt["mood"]}.
-
                     Use simple, clear, and concrete language. Help the child understand what the word means and how it relates to their daily life. Give examples that make sense for a child of that age and emotional state.
-
                     The explanation should be friendly and supportive. Please give a direct explanation — do not include placeholders or fields in brackets like [name]
                     **Limit the explanatory paragraph to no more than 80 words.**
                     '''
@@ -77,6 +98,8 @@ class DataProcessor(QObject):
                 temperature=0.7,
             )
             chat_gtp_response = response.choices[0].message.content
+            data_promt["prediction"] = chat_gtp_response
+            db.collection("inferences").add(data_promt)
             self.finished.emit(data_promt, chat_gtp_response)
 
         except Exception as e:
@@ -116,3 +139,4 @@ class LoadingScreen(QWidget):
 
     def on_processing_error(self, error_message):
         print(f"Error al procesar los datos: {error_message}")
+        self.stacked_widget.setCurrentIndex(1)

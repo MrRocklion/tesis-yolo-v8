@@ -8,6 +8,7 @@ class MainController(QObject):
     yoloChanged = Signal(bool)
     dataChanged = Signal(dict)
     gptPredictionChanged = Signal(str)
+    nameChanged = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -17,6 +18,12 @@ class MainController(QObject):
         self._class_yolo = ""
         self._yolo = False
         self._gpt_prediction = ""
+        self._name = "David"
+
+    def set_name(self, name: str):
+        self._name = name
+        self.nameChanged.emit(name)
+        self.nameChanged.emit(self.get_name())
 
     def set_yolo(self, yolo: bool):
         self._yolo = yolo
@@ -57,6 +64,9 @@ class MainController(QObject):
 
     def get_emotion(self) -> str:
         return self._emotion
+
+    def get_name(self) -> str:
+        return self._name
 
     def get_user_data(self) -> dict:
         return {
