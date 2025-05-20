@@ -14,10 +14,10 @@ if not api_key:
 client = OpenAI(api_key=api_key)
 
 response = client.chat.completions.create(
-    model="gpt-4o",  # Puedes usar también gpt-4 o gpt-3.5-turbo
+    model="gpt-4o",
     messages=[
-        {"role": "user", "content": "Write a one-sentence bedtime story about a unicorn."}
-    ],
+            {"role": "user", "content": "Write a one-sentence bedtime story about a unicorn."}
+        ],
     temperature=0.7,
 )
 

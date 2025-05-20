@@ -67,19 +67,15 @@ class DataProcessor(QObject):
             }
             # prompt = f'''
             #     Generate an explanatory paragraph in spanish adapted for a child diagnosed with Autism Spectrum Disorder (ASD), about the word "{data_promt["class"]}". 
-
             #     The explanation should:
             #     - Use simple, clear, and concrete language.
             #     - Describe what the word means and how it is used in daily life.
             #     - Include examples that relate to the childs world and help improve their semantic understanding.
-
             #     Take into account:
             #     - The child's current mood: {data_promt["mood"]}
             #     - The child's age: {data_promt["age"]} years old
             #     - The child's gender: {data_promt["gender"]}
-
             #     Make the explanation friendly, supportive, and emotionally sensitive based on the child's mood.
-
             #     '''
             prompt = f'''
                     Generate an explanatory paragraph in spanish adapted for a child named {data_promt['name']} diagnosed with Autism Spectrum Disorder (ASD), about the word "{data_promt["class"]}".
