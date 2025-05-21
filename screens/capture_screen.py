@@ -45,7 +45,7 @@ class CaptureScreen(QWidget):
         if not self.cap.isOpened():
             self.image_label.setText("No se pudo acceder a la cámara.")
             self.start = False
-            self.stacked_widget.setCurrentIndex(6)
+            self.stacked_widget.setCurrentIndex(1)
             return
 
         self.timer.timeout.connect(self.mostrar_frame)

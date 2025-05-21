@@ -2,6 +2,7 @@ import time
 import cv2
 import numpy as np
 import onnxruntime
+import multiprocessing
 
 from yolov8.utils import xywh2xyxy, draw_detections, multiclass_nms
 
@@ -19,12 +20,25 @@ class YOLOv8:
         return self.detect_objects(image)
 
     def initialize_model(self, path):
-        self.session = onnxruntime.InferenceSession(path,
-                                                    providers=onnxruntime.get_available_providers())
-        # Get model info
+    # Crear opciones de sesión
+        options = onnxruntime.SessionOptions()
+
+        # Usar todos los núcleos disponibles
+        options.intra_op_num_threads = multiprocessing.cpu_count()
+
+        # Opcional: desactiva logs si quieres rendimiento máximo
+        options.log_severity_level = 3
+
+        # Crear la sesión con las opciones personalizadas
+        self.session = onnxruntime.InferenceSession(
+            path,
+            sess_options=options,
+            providers=onnxruntime.get_available_providers()
+        )
+
+        # Obtener información del modelo
         self.get_input_details()
         self.get_output_details()
-
 
     def detect_objects(self, image):
         input_tensor = self.prepare_input(image)
