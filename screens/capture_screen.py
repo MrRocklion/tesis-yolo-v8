@@ -58,7 +58,7 @@ class CaptureScreen(QWidget):
     def mostrar_frame(self):
         ret, frame = self.cap.read()
         if ret:
-            
+            frame_start = time.time()
             if self.start:
                 boxes, scores, class_ids = self.yolov8_detector(frame)
             else:
@@ -101,6 +101,9 @@ class CaptureScreen(QWidget):
                 self.image_label.width(), self.image_label.height(),
                 Qt.KeepAspectRatio
             ))
+            frame_end = time.time()
+            fps = 1 / (frame_end - frame_start)
+            print(f"FPS: {fps:.2f}")
 
     def crop_to_portrait(self,image, aspect_ratio=(4, 5)):
         height, width, _ = image.shape
