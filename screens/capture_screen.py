@@ -105,7 +105,7 @@ class CaptureScreen(QWidget):
             ))
             frame_end = time.time()
             fps = 1 / (frame_end - frame_start)
-            print(f"FPS: {fps:.2f}")
+
 
     def crop_to_portrait(self,image, aspect_ratio=(4, 5)):
         height, width, _ = image.shape

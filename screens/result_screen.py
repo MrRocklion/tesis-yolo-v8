@@ -3,6 +3,7 @@ from PySide6.QtCore import Qt
 from widgets.custom_btn import CustomButton
 import os
 import pathlib
+import subprocess
 class ResultScreen(QWidget):
     def __init__(self, stacked_widget,controller):
         super().__init__()
@@ -36,7 +37,7 @@ class ResultScreen(QWidget):
         layout.addLayout(horizontal_layout)
 
         self.controller.gptPredictionChanged.connect(self.see_result)
-        self.controller.fileNameChanged.connect(self.reproducir_audio)
+        self.controller.fileNameChanged.connect(self._play_sound)
 
         self.setLayout(layout)
     def see_result(self, prediction):
@@ -47,10 +48,6 @@ class ResultScreen(QWidget):
         self.controller.set_yolo(True)
     
     def reproducir_audio(self,file_name):
-        """
-        Reproduce un archivo de audio desde la carpeta 'audio'.
-        Ejemplo: reproducir_audio("salida_20250928_123045.mp3")
-        """
         ruta = pathlib.Path("audio") / file_name
         
         if not ruta.exists():
@@ -63,3 +60,10 @@ class ResultScreen(QWidget):
         except Exception as e:
             print(f"Error al reproducir audio: {e}")
 
+    def _play_sound(self, file_name):
+            path = pathlib.Path("audio") / file_name
+            try:
+                subprocess.run(["aplay", path], check=True)
+                print(f"Reproducción de audio completada: {path}")
+            except subprocess.CalledProcessError as e:
+                print(f"Error al reproducir el audio {path}: {e}")

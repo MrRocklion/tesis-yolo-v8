@@ -142,6 +142,7 @@ class LoadingScreen(QWidget):
     def on_processing_finished(self, data_promt, chat_gtp_response):
         print(data_promt)
         self.controller.set_gpt_prediction(chat_gtp_response)
+        self.controller.set_file_name(data_promt['file_name'])
         self.stacked_widget.setCurrentIndex(7)
 
 
