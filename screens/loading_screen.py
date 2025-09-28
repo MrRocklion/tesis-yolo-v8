@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime
+import pathlib
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 service_account_info = {
@@ -63,7 +64,8 @@ class DataProcessor(QObject):
                 "name": self.controller.get_name(),
                 "prediction":"",
                 "timestamp": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                "created_at": firestore.SERVER_TIMESTAMP
+                "created_at": firestore.SERVER_TIMESTAMP,
+                "file_name":""
             }
             # prompt = f'''
             #     Generate an explanatory paragraph in spanish adapted for a child diagnosed with Autism Spectrum Disorder (ASD), about the word "{data_promt["class"]}". 
@@ -95,6 +97,17 @@ class DataProcessor(QObject):
             chat_gtp_response = response.choices[0].message.content
             data_promt["prediction"] = chat_gtp_response
             db.collection("inferences").add(data_promt)
+            carpeta_audio = pathlib.Path("audio")
+            carpeta_audio.mkdir(parents=True, exist_ok=True)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            ruta_salida = carpeta_audio / f"salida_{timestamp}.mp3"
+            with client.audio.speech.with_streaming_response.create(
+                model="gpt-4o-mini-tts",
+                voice="alloy",
+                input=chat_gtp_response,
+            ) as respuesta:
+                respuesta.stream_to_file(ruta_salida)
+            data_promt["file_name"] = f"salida_{timestamp}.mp3"
             self.finished.emit(data_promt, chat_gtp_response)
 
         except Exception as e:

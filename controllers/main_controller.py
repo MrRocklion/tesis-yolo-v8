@@ -8,6 +8,7 @@ class MainController(QObject):
     yoloChanged = Signal(bool)
     dataChanged = Signal(dict)
     gptPredictionChanged = Signal(str)
+    fileNameChanged = Signal(str)
     nameChanged = Signal(str)
 
     def __init__(self):
@@ -18,6 +19,7 @@ class MainController(QObject):
         self._class_yolo = ""
         self._yolo = False
         self._gpt_prediction = ""
+        self._file_name = ""
         self._name = "David"
 
     def set_name(self, name: str):
@@ -54,6 +56,11 @@ class MainController(QObject):
         self._gpt_prediction = prediction
         self.gptPredictionChanged.emit(prediction)
         self.gptPredictionChanged.emit(self.get_gpt_prediction())
+    
+    def set_file_name(self, file_name: str):
+        self._file_name = file_name
+        self.fileNameChanged.emit(file_name)
+        self.fileNameChanged.emit(self.get_file_name())
         
 
     def get_age(self) -> int:
@@ -80,6 +87,9 @@ class MainController(QObject):
     
     def get_gpt_prediction(self) -> str:
         return self._gpt_prediction
+    
+    def get_file_name(self) -> str:
+        return self._file_name
 
     def reset(self):
         self.set_age(0)

@@ -1,6 +1,8 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout,QLabel,QHBoxLayout)
 from PySide6.QtCore import Qt
 from widgets.custom_btn import CustomButton
+import os
+import pathlib
 class ResultScreen(QWidget):
     def __init__(self, stacked_widget,controller):
         super().__init__()
@@ -34,13 +36,30 @@ class ResultScreen(QWidget):
         layout.addLayout(horizontal_layout)
 
         self.controller.gptPredictionChanged.connect(self.see_result)
+        self.controller.fileNameChanged.connect(self.reproducir_audio)
 
         self.setLayout(layout)
     def see_result(self, prediction):
         self.result_label.setText(prediction)
+        
     def retry_event(self):
         self.stacked_widget.setCurrentIndex(5)
         self.controller.set_yolo(True)
-
-
+    
+    def reproducir_audio(self,file_name):
+        """
+        Reproduce un archivo de audio desde la carpeta 'audio'.
+        Ejemplo: reproducir_audio("salida_20250928_123045.mp3")
+        """
+        ruta = pathlib.Path("audio") / file_name
+        
+        if not ruta.exists():
+            print(f"El archivo {ruta} no existe.")
+            return
+        
+        try:
+            print(f"Reproduciendo: {ruta}")
+            os.system(f"mpg123 {ruta}")
+        except Exception as e:
+            print(f"Error al reproducir audio: {e}")
 
