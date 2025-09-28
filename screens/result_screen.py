@@ -37,7 +37,7 @@ class ResultScreen(QWidget):
         layout.addLayout(horizontal_layout)
 
         self.controller.gptPredictionChanged.connect(self.see_result)
-        self.controller.fileNameChanged.connect(self._play_sound)
+        self.controller.fileNameChanged.connect(self.reproducir_audio)
 
         self.setLayout(layout)
     def see_result(self, prediction):
