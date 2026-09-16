@@ -5,7 +5,7 @@ import onnxruntime
 import multiprocessing
 
 from yolov8.utils import xywh2xyxy, draw_detections, multiclass_nms
-
+# ocupar el hat de hailo v8
 
 class YOLOv8:
 

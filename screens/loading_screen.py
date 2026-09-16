@@ -11,6 +11,8 @@ from datetime import datetime
 import pathlib
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
+ultralytics_api_key = os.getenv("ULTRALYTICS_API_KEY")
+ultralytics_model_url = os.getenv("ULTRALYTICS_MODEL_URL")
 service_account_info = {
     "type": os.getenv("TYPE"),
     "project_id": os.getenv("PROJECT_ID"),
@@ -26,6 +28,10 @@ service_account_info = {
 }
 if not api_key:
     raise ValueError("La variable de entorno OPENAI_API_KEY no está definida.")
+if not ultralytics_api_key:
+    raise ValueError("La variable de entorno ULTRALYTICS_API_KEY no está definida.")
+if not ultralytics_model_url:
+    raise ValueError("La variable de entorno ULTRALYTICS_MODEL_URL no está definida.")
 client = OpenAI(api_key=api_key)
 cred = credentials.Certificate(service_account_info)
 firebase_admin.initialize_app(cred)
@@ -43,9 +49,9 @@ class DataProcessor(QObject):
     def run(self):
         try:
             url = "https://predict.ultralytics.com"
-            headers = {"x-api-key": "0a9bc0db09f57ab77a254e400877b03f91ac946e5d"}
+            headers = {"x-api-key": ultralytics_api_key}
             data = {
-                "model": "https://hub.ultralytics.com/models/5NOJhLhigIjjuOABqyUQ",
+                "model": ultralytics_model_url,
                 "imgsz": 640,
                 "conf": 0.25,
                 "iou": 0.45

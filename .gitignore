@@ -73,5 +73,7 @@ htmlcov/
 
 # Flask stuff:  #
 *.env
+!.env.example
 
 /target.jpg
+/audio/
